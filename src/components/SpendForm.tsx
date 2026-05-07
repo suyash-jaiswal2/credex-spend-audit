@@ -51,7 +51,7 @@ export function SpendForm({ onSubmit }: Props) {
         </div>
         <div className="space-y-1">
           <Label>Primary use case</Label>
-          <Select value={input.useCase} onValueChange={(v) => setUseCase(v as UseCase)}>
+          <Select value={input.useCase} onValueChange={(v) => v && setUseCase(v as UseCase)}>
             <SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>
               {(["coding","writing","data","research","mixed"] as UseCase[]).map((u) => (
@@ -98,7 +98,7 @@ export function SpendForm({ onSubmit }: Props) {
                 <Label className="text-xs">Plan</Label>
                 <Select
                   value={entry.plan}
-                  onValueChange={(v) => upsertTool({ ...entry, plan: v })}
+                  onValueChange={(v) => v && upsertTool({ ...entry, plan: v })}
                 >
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
