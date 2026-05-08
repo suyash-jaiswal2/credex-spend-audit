@@ -21,3 +21,15 @@
 **Blockers / what I'm stuck on:** some version conflicts, CI not building properly
 
 **Plan for tomorrow:** complete audit engine, result page, credex cta, prompts.md
+
+## Day 2 — 2026-05-07
+
+**Hours worked:** 2
+
+**What I did:** Complete the audit engine, plave the llm, sort out the logic and pricing
+
+**What I learned:** Nothing significant and new
+
+**Blockers / what I'm stuck on:** Need to improve the frontend design, will work on the last day
+
+**Plan for tomorrow:** backend on supabase, email capturing, setup DB, Opengraph/twitter tags, abuse protection
