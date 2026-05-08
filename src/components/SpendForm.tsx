@@ -17,14 +17,14 @@ import {
 
 interface Props {
   onSubmit: () => void;
+  loading?: boolean;
 }
 
-export function SpendForm({ onSubmit }: Props) {
+export function SpendForm({ onSubmit, loading = false }: Props)  {
   const { input, upsertTool, removeTool, setTeamSize, setUseCase } = useAuditStore();
   const [selectedToolId, setSelectedToolId] = useState<ToolId | "">("");
 
   const tool = TOOLS.find((t) => t.id === selectedToolId);
-  const existingEntry = input.tools.find((t) => t.toolId === selectedToolId);
 
   function handleAddTool() {
     if (!selectedToolId || !tool) return;
@@ -139,8 +139,8 @@ export function SpendForm({ onSubmit }: Props) {
 
       {/* Submit */}
       {input.tools.length > 0 && (
-        <Button className="w-full" onClick={onSubmit}>
-          Run audit →
+        <Button className="w-full" onClick={onSubmit} disabled={loading}>
+          {loading ? "Analysing..." : "Run audit →"}
         </Button>
       )}
     </div>

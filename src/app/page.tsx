@@ -3,18 +3,33 @@
 import { useRouter } from "next/navigation";
 import { SpendForm } from "@/components/SpendForm";
 import { useAuditStore } from "@/lib/store";
-import { runAudit } from "@/lib/audit-engine";
 
 export default function Home() {
-  const router = useRouter();
-  const { input } = useAuditStore();
+  const router = useRouter();           // add this
+  const { input } = useAuditStore();  
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  function handleSubmit() {
-    const result = runAudit(input);
-    // Day 4 you'll POST this to /api/audit and get a real ID back
-    // For now, stash in sessionStorage and navigate
-    sessionStorage.setItem("audit_result", JSON.stringify(result));
-    router.push("/audit/preview");
+  async function handleSubmit() {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/audit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(input),
+      });
+
+      if (!res.ok) throw new Error("Audit failed");
+
+      const result: AuditResult = await res.json();
+      sessionStorage.setItem("audit_result", JSON.stringify(result));
+      router.push("/audit/preview");
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -23,7 +38,10 @@ export default function Home() {
       <p className="text-muted-foreground mb-8">
         Find out where you&apos;re overpaying on AI tools — free, no account needed.
       </p>
-      <SpendForm onSubmit={handleSubmit} />
+      {error && (
+        <p className="text-sm text-destructive mt-2">{error}</p>
+      )}
+      <SpendForm onSubmit={handleSubmit} loading={loading} />
     </main>
   );
 }

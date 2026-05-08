@@ -86,8 +86,8 @@
   — https://ai.google.dev/gemini-api/docs/pricing — verified 2026-05-07
 
 ## Windsurf
-- Free: $0/user/month — https://gemini.google/us/subscriptions — verified 2026-05-06
-- Pro: $20/user/month — https://gemini.google/us/subscriptions — verified 2026-05-06
-- Max: $200/user/month — https://gemini.google/us/subscriptions — verified 2026-05-06
-- Teams: $40/user/month — https://gemini.google/us/subscriptions— verified 2026-05-06
-- Enterprise: $XX/user/month — https://cloud.google.com/ai/gemini-for-work — verified 2026-05-06
+- Free: $0/user/month — https://windsurf.com/pricing — verified 2026-05-06
+- Pro: $20/user/month — https://windsurf.com/pricing — verified 2026-05-06
+- Max: $200/user/month — https://windsurf.com/pricing — verified 2026-05-06
+- Teams: $40/user/month — https://windsurf.com/pricing — verified 2026-05-06
+- Enterprise: $XX/user/month — https://windsurf.com/pricing — verified 2026-05-06
