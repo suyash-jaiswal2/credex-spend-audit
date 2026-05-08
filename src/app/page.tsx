@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import type { AuditResult } from "@/types";
 import { SpendForm } from "@/components/SpendForm";
 import { useAuditStore } from "@/lib/store";
 
