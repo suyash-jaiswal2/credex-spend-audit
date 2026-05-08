@@ -43,7 +43,7 @@ describe("auditTool — cursor", () => {
   it("recommends downgrade from Business to Pro for a team of 2", () => {
     const entry: ToolEntry = {
       toolId: "cursor",
-      plan: "business",
+      plan: "teams",   // Teams = $40/seat, 2 seats = $80
       seats: 2,
       monthlySpend: 80,
     };
@@ -54,9 +54,9 @@ describe("auditTool — cursor", () => {
   });
 
   it("recommends keep for a correctly-sized Business plan (8 seats)", () => {
-    const entry: ToolEntry = {
+      const entry: ToolEntry = {
       toolId: "cursor",
-      plan: "business",
+      plan: "teams",   // Teams = $40/seat, 8 seats = $320
       seats: 8,
       monthlySpend: 320,
     };
