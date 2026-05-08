@@ -26,7 +26,7 @@
 
 **Hours worked:** 2
 
-**What I did:** Complete the audit engine, plave the llm, sort out the logic and pricing
+**What I did:** Complete the audit engine, plave the llm, sort out the logic and pricing, Interview 1 user
 
 **What I learned:** Nothing significant and new
 
