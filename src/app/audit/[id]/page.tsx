@@ -5,7 +5,7 @@ import { AuditClient } from "./AuditClient";
 import type { Metadata } from "next";
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 async function getAudit(id: string): Promise<AuditResult | null> {
@@ -29,7 +29,8 @@ async function getAudit(id: string): Promise<AuditResult | null> {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const audit = await getAudit(params.id);
+  const { id } = await params;
+  const audit = await getAudit(id);
   if (!audit) return { title: "Audit not found" };
 
   const savings = audit.totalMonthlySavings;
@@ -46,7 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      url: `${process.env.NEXT_PUBLIC_APP_URL}/audit/${params.id}`,
+      url: `${process.env.NEXT_PUBLIC_APP_URL}/audit/${audit}`,
       siteName: "AI Spend Audit",
       type: "website",
     },
@@ -59,7 +60,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function AuditPage({ params }: Props) {
-  const audit = await getAudit(params.id);
+  const { id } = await params;
+  const audit = await getAudit(id);
   if (!audit) notFound();
   return <AuditClient serverResult={audit} />;
 }
