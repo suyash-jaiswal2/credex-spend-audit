@@ -22,7 +22,7 @@
 
 **Plan for tomorrow:** complete audit engine, result page, credex cta, prompts.md
 
-## Day 2 — 2026-05-07
+## Day 3 — 2026-05-08
 
 **Hours worked:** 2
 
@@ -33,3 +33,15 @@
 **Blockers / what I'm stuck on:** Need to improve the frontend design, will work on the last day
 
 **Plan for tomorrow:** backend on supabase, email capturing, setup DB, Opengraph/twitter tags, abuse protection
+
+## Day 4 — 2026-05-09
+
+**Hours worked:** 3
+
+**What I did:** Supabase setup, rate limiting, shareable audit urls, lead capture, resend emails
+
+**What I learned:** Setting up dynamic urls and resend emails. Found out about honeypots.
+
+**Blockers / what I'm stuck on:** Finding suitable users for interview
+
+**Plan for tomorrow:** Improve performance, redo UI, pdf export feature
