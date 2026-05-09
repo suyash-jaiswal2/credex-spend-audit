@@ -14,7 +14,6 @@ export function AuditClient({ serverResult }: Props) {
     const cached = sessionStorage.getItem("audit_result");
     if (!cached) return serverResult;
     const parsed: AuditResult = JSON.parse(cached);
-    // Only use cache if it matches this audit ID
     return parsed.id === serverResult.id ? parsed : serverResult;
   });
 

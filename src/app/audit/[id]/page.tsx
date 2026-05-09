@@ -36,7 +36,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = savings > 0
     ? `AI spend audit — $${savings.toFixed(0)}/mo in savings found`
     : "AI spend audit — your stack is optimised";
-  const description = `Free AI tool spend audit. ${savings > 0 ? `Potential savings of $${(savings * 12).toFixed(0)}/year identified.` : "No overspend found."}`;
+  const description = savings > 0
+    ? `Potential savings of $${(savings * 12).toFixed(0)}/year identified across your AI tool stack.`
+    : "No overspend found — your AI stack is well optimised.";
 
   return {
     title,
