@@ -3,16 +3,26 @@
 import type { AuditResult, ToolRecommendation } from "@/types";
 import { TOOLS } from "@/lib/tools";
 import { LeadCaptureForm } from "./LeadCaptureForm";
+import { useState } from "react";
 
 interface Props {
   result: AuditResult;
   isPublic?: boolean;
 }
 
+
+
 export function AuditResultsView({ result, isPublic = false }: Props) {
   const { totalMonthlySavings, totalAnnualSavings, recommendations, summary } = result;
   const isOptimal = totalMonthlySavings < 100;
   const isHighSavings = totalMonthlySavings > 500;
+  const [copied, setCopied] = useState(false);
+
+  function handleCopy() {
+    navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_APP_URL}/audit/${result.id}`);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
 
   return (
     <main className="max-w-2xl mx-auto px-4 py-12 space-y-8">
@@ -45,13 +55,8 @@ export function AuditResultsView({ result, isPublic = false }: Props) {
         <p className="text-sm text-muted-foreground truncate">
           {process.env.NEXT_PUBLIC_APP_URL}/audit/{result.id}
         </p>
-        <button
-          className="text-sm font-medium shrink-0"
-          onClick={() => navigator.clipboard.writeText(
-            `${process.env.NEXT_PUBLIC_APP_URL}/audit/${result.id}`
-          )}
-        >
-          Copy link
+        <button onClick={handleCopy} aria-label="Copy audit link">
+          {copied ? "Copied ✓" : "Copy link"}
         </button>
       </div>
 
