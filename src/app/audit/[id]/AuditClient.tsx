@@ -2,7 +2,12 @@
 
 import { useState } from "react";
 import type { AuditResult } from "@/types";
-import { AuditResultsView } from "@/components/AuditResultsView";
+import dynamic from "next/dynamic";
+
+const AuditResultsView = dynamic(
+  () => import("@/components/AuditResultsView").then((m) => ({ default: m.AuditResultsView })),
+  { ssr: false }
+);
 
 interface Props {
   serverResult: AuditResult;

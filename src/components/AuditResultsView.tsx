@@ -18,7 +18,9 @@ export function AuditResultsView({ result, isPublic = false }: Props) {
     <main className="max-w-2xl mx-auto px-4 py-12 space-y-8">
 
       {/* Hero */}
-      <div className="rounded-xl border p-6 text-center space-y-1">
+      <div className={`rounded-xl border p-8 text-center space-y-2 ${
+        !isOptimal ? "bg-gradient-to-b from-green-50 to-white dark:from-green-950 dark:to-background" : ""
+      }`}>
         {isOptimal ? (
           <>
             <p className="text-sm text-muted-foreground">Audit complete</p>
@@ -122,6 +124,14 @@ function RecommendationCard({ rec }: { rec: ToolRecommendation }) {
       </div>
       <div className="flex items-baseline justify-between text-sm">
         <span className="text-muted-foreground">${rec.currentSpend}/mo</span>
+        {rec.monthlySavings > 0 && rec.currentSpend > 0 && (
+          <div className="w-full bg-secondary rounded-full h-1.5 mt-1">
+            <div
+              className="bg-green-500 h-1.5 rounded-full"
+              style={{ width: `${Math.min((rec.monthlySavings / rec.currentSpend) * 100, 100)}%` }}
+            />
+          </div>
+        )}
         {rec.monthlySavings > 0 && (
           <span className="text-green-600 font-medium">
             &minus;${rec.monthlySavings.toFixed(0)}/mo
