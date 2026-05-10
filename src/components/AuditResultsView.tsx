@@ -24,7 +24,7 @@ export function AuditResultsView({ result, isPublic = false }: Props) {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-12 space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+    <div className="max-w-3xl mx-auto px-4 py-12 space-y-12">
 
       {/* Header & Share */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
@@ -90,8 +90,8 @@ export function AuditResultsView({ result, isPublic = false }: Props) {
           {recommendations.map((rec, i) => (
             <div 
               key={rec.toolId} 
-              className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both"
-              style={{ animationDelay: `${i * 150}ms`, animationDuration: '700ms' }}
+              className="animate-in fade-in slide-in-from-bottom-2 fill-mode-both"
+              style={{ animationDelay: `${i * 100}ms`, animationDuration: '300ms' }}
             >
               <RecommendationCard rec={rec} />
             </div>
@@ -101,7 +101,7 @@ export function AuditResultsView({ result, isPublic = false }: Props) {
 
       {/* Credex CTA */}
       {isHighSavings && (
-        <div className="rounded-2xl border bg-card p-8 shadow-sm mt-12 space-y-6 animate-in fade-in zoom-in-95 duration-1000 delay-500">
+        <div className="rounded-2xl border bg-card p-8 shadow-sm mt-12 space-y-6 animate-in fade-in zoom-in-95 duration-500 delay-200">
           <div className="space-y-2">
             <h3 className="text-2xl font-semibold tracking-tight">Scale Your Savings with Credex</h3>
             <p className="text-muted-foreground leading-relaxed">
@@ -171,7 +171,7 @@ function RecommendationCard({ rec }: { rec: ToolRecommendation }) {
           <div className="space-y-1.5">
             <div className="w-full bg-border rounded-full h-1">
               <div
-                className="bg-primary h-1 rounded-full transition-all duration-1000"
+                className="bg-primary h-1 rounded-full transition-all duration-500"
                 style={{ width: `${Math.min((rec.monthlySavings / rec.currentSpend) * 100, 100)}%` }}
               />
             </div>

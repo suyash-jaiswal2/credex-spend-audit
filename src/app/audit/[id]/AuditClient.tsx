@@ -1,26 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { AuditResult } from "@/types";
-import dynamic from "next/dynamic";
-
-const AuditResultsView = dynamic(
-  () => import("@/components/AuditResultsView").then((m) => ({ default: m.AuditResultsView })),
-  { ssr: false }
-);
+import { AuditResultsView } from "@/components/AuditResultsView";
 
 interface Props {
   serverResult: AuditResult;
 }
 
 export function AuditClient({ serverResult }: Props) {
-  const [result] = useState<AuditResult>(() => {
-    if (typeof window === "undefined") return serverResult;
+  const [result, setResult] = useState<AuditResult>(serverResult);
+
+  useEffect(() => {
+    // Client-side hydration from sessionStorage if needed, but we start with SSR result
     const cached = sessionStorage.getItem("audit_result");
-    if (!cached) return serverResult;
-    const parsed: AuditResult = JSON.parse(cached);
-    return parsed.id === serverResult.id ? parsed : serverResult;
-  });
+    if (cached) {
+      try {
+        const parsed: AuditResult = JSON.parse(cached);
+        if (parsed.id === serverResult.id) {
+          setResult(parsed);
+        }
+      } catch (e) {
+        console.error("Failed to parse cached audit result", e);
+      }
+    }
+  }, [serverResult.id, serverResult]);
 
   return <AuditResultsView result={result} isPublic={false} />;
 }

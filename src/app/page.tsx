@@ -51,7 +51,7 @@ export default function Home() {
         <ThemeToggle />
       </header>
 
-      <main className="flex-1 flex flex-col items-center p-6 md:p-12 lg:p-24 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+      <main className="flex-1 flex flex-col items-center p-6 md:p-12 lg:p-24">
         <div className="w-full max-w-2xl space-y-10">
           <div className="space-y-4 text-center">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">

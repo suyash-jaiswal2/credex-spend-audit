@@ -37,7 +37,7 @@ export function SpendForm({ onSubmit, loading = false }: Props)  {
   }
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="space-y-8">
       {/* Team context */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-card p-6 rounded-xl border shadow-sm">
         <div className="space-y-2">
