@@ -4,13 +4,12 @@ import type { AuditResult, ToolRecommendation } from "@/types";
 import { TOOLS } from "@/lib/tools";
 import { LeadCaptureForm } from "./LeadCaptureForm";
 import { useState } from "react";
+import { CheckCircle2, TrendingDown, ArrowRightLeft, XCircle, Copy, Check } from "lucide-react";
 
 interface Props {
   result: AuditResult;
   isPublic?: boolean;
 }
-
-
 
 export function AuditResultsView({ result, isPublic = false }: Props) {
   const { totalMonthlySavings, totalAnnualSavings, recommendations, summary } = result;
@@ -25,125 +24,164 @@ export function AuditResultsView({ result, isPublic = false }: Props) {
   }
 
   return (
-    <main className="max-w-2xl mx-auto px-4 py-12 space-y-8">
+    <div className="max-w-3xl mx-auto px-4 py-12 space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
 
-      {/* Hero */}
-      <div className={`rounded-xl border p-8 text-center space-y-2 ${
-        !isOptimal ? "bg-gradient-to-b from-green-50 to-white dark:from-green-950 dark:to-background" : ""
-      }`}>
-        {isOptimal ? (
-          <>
-            <p className="text-sm text-muted-foreground">Audit complete</p>
-            <p className="text-2xl font-medium">You&apos;re spending well ✓</p>
-            <p className="text-sm text-muted-foreground mt-2">
-              No significant savings found for your current stack.
-            </p>
-          </>
-        ) : (
-          <>
-            <p className="text-sm text-muted-foreground">Potential monthly savings</p>
-            <p className="text-4xl font-medium">${totalMonthlySavings.toFixed(0)}</p>
-            <p className="text-sm text-muted-foreground">
-              ${totalAnnualSavings.toFixed(0)} saved per year
-            </p>
-          </>
-        )}
-      </div>
-
-      {/* Share URL */}
-      <div className="rounded-lg border p-4 flex items-center justify-between gap-4">
-        <p className="text-sm text-muted-foreground truncate">
-          {process.env.NEXT_PUBLIC_APP_URL}/audit/{result.id}
-        </p>
-        <button onClick={handleCopy} aria-label="Copy audit link">
-          {copied ? "Copied ✓" : "Copy link"}
+      {/* Header & Share */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Executive Summary</h1>
+          <p className="text-muted-foreground text-sm">Audit ID: {result.id.slice(0,8)}</p>
+        </div>
+        <button 
+          onClick={handleCopy}
+          className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium border rounded-md hover:bg-secondary transition-colors"
+        >
+          {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+          {copied ? "Link Copied" : "Share Report"}
         </button>
       </div>
 
-      {/* AI Summary */}
-      <div className="rounded-xl border p-6 space-y-2">
-        <p className="text-xs text-muted-foreground uppercase tracking-wide">AI analysis</p>
-        <p className="text-sm leading-relaxed">{summary}</p>
+      {/* Hero Savings Card */}
+      <div className={`relative overflow-hidden rounded-2xl border p-8 md:p-12 shadow-sm ${
+        !isOptimal ? "bg-gradient-to-br from-card to-secondary/30" : "bg-card"
+      }`}>
+        <div className="relative z-10 space-y-4">
+          {isOptimal ? (
+            <>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-sm font-medium">
+                <CheckCircle2 className="w-4 h-4" /> Stack Optimized
+              </div>
+              <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Efficiency Verified</h2>
+              <p className="text-lg text-muted-foreground max-w-lg">
+                Your current AI tooling stack is highly optimized. No significant structural savings identified at this time.
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Identified Potential Savings</p>
+              <div className="flex items-baseline gap-2">
+                <span className="text-5xl md:text-7xl font-bold tracking-tighter text-primary">${totalMonthlySavings.toFixed(0)}</span>
+                <span className="text-xl md:text-2xl text-muted-foreground font-medium">/mo</span>
+              </div>
+              <p className="text-lg font-medium text-foreground">
+                <span className="text-primary">${totalAnnualSavings.toFixed(0)}</span> projected annual reduction
+              </p>
+            </>
+          )}
+        </div>
       </div>
 
-      {/* Per-tool breakdown */}
-      <div className="space-y-3">
-        <h2 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
-          Breakdown
-        </h2>
-        {recommendations.map((rec) => (
-          <RecommendationCard key={rec.toolId} rec={rec} />
-        ))}
+      {/* AI Analysis */}
+      <div className="space-y-4">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Strategic Analysis</h3>
+        <div className="rounded-xl border bg-card p-6 md:p-8 shadow-sm">
+          <p className="text-base md:text-lg leading-relaxed text-foreground/90">
+            {summary}
+          </p>
+        </div>
+      </div>
+
+      {/* Per-tool Breakdown */}
+      <div className="space-y-6">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+          Stack Breakdown & Recommendations
+        </h3>
+        <div className="grid gap-4">
+          {recommendations.map((rec, i) => (
+            <div 
+              key={rec.toolId} 
+              className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both"
+              style={{ animationDelay: `${i * 150}ms`, animationDuration: '700ms' }}
+            >
+              <RecommendationCard rec={rec} />
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Credex CTA */}
       {isHighSavings && (
-        <div className="rounded-xl border-2 border-green-600 bg-green-50 dark:bg-green-950 p-6 space-y-3">
-          <p className="font-medium text-green-900 dark:text-green-100">
-            Capture even more savings with Credex
-          </p>
-          <p className="text-sm text-green-800 dark:text-green-200">
-            Credex sources discounted AI credits from companies that overforecast.
-            Teams saving ${totalMonthlySavings.toFixed(0)}/mo on plan changes often
-            save an additional 20&ndash;40% buying through credits.
-          </p>
+        <div className="rounded-2xl border bg-card p-8 shadow-sm mt-12 space-y-6 animate-in fade-in zoom-in-95 duration-1000 delay-500">
+          <div className="space-y-2">
+            <h3 className="text-2xl font-semibold tracking-tight">Scale Your Savings with Credex</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              We source secondary-market AI credits from enterprise over-allocations. Teams optimizing their stack structure often achieve an additional <strong className="text-foreground font-semibold">20–40% net reduction</strong> in unit costs by purchasing through the Credex exchange.
+            </p>
+          </div>
           <a
             href="https://credex.rocks"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block text-sm font-medium text-green-700 dark:text-green-300 underline"
+            className="inline-flex items-center justify-center h-12 px-8 rounded-lg bg-primary text-primary-foreground font-medium shadow-md hover:shadow-lg transition-all"
           >
-            Book a Credex consultation &#8594;
+            Schedule Executive Review
           </a>
         </div>
       )}
 
       {/* Lead capture — shown after value, never before */}
       {!isPublic && (
-        <LeadCaptureForm
-          auditId={result.id}
-          isOptimal={isOptimal}
-        />
+        <div className="pt-8 border-t">
+          <LeadCaptureForm
+            auditId={result.id}
+            isOptimal={isOptimal}
+          />
+        </div>
       )}
 
-    </main>
+    </div>
   );
 }
 
 function RecommendationCard({ rec }: { rec: ToolRecommendation }) {
   const meta = TOOLS.find((t) => t.id === rec.toolId);
-  const actionColors: Record<string, string> = {
-    keep:      "text-green-700 bg-green-50 dark:bg-green-950 dark:text-green-300",
-    downgrade: "text-amber-700 bg-amber-50 dark:bg-amber-950 dark:text-amber-300",
-    switch:    "text-blue-700 bg-blue-50 dark:bg-blue-950 dark:text-blue-300",
-    cancel:    "text-red-700 bg-red-50 dark:bg-red-950 dark:text-red-300",
+  
+  const actionConfig = {
+    keep:      { color: "text-green-600 dark:text-green-400", bg: "bg-green-50 dark:bg-green-950/50", border: "border-green-200 dark:border-green-900", icon: CheckCircle2 },
+    downgrade: { color: "text-yellow-600 dark:text-yellow-400", bg: "bg-yellow-50 dark:bg-yellow-950/50", border: "border-yellow-200 dark:border-yellow-900", icon: TrendingDown },
+    switch:    { color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-950/50", border: "border-blue-200 dark:border-blue-900", icon: ArrowRightLeft },
+    cancel:    { color: "text-red-600 dark:text-red-400", bg: "bg-red-50 dark:bg-red-950/50", border: "border-red-200 dark:border-red-900", icon: XCircle },
   };
 
+  const config = actionConfig[rec.recommendedAction];
+  const Icon = config.icon;
+
   return (
-    <div className="rounded-lg border p-4 space-y-2">
-      <div className="flex items-center justify-between">
-        <span className="font-medium text-sm">{meta?.label ?? rec.toolId}</span>
-        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${actionColors[rec.recommendedAction]}`}>
-          {rec.recommendedAction}
-        </span>
+    <div className={`rounded-xl border bg-card p-6 shadow-sm flex flex-col md:flex-row gap-6 transition-all hover:shadow-md`}>
+      {/* Left Column: Tool & Action */}
+      <div className="flex-1 space-y-4">
+        <div className="flex items-center justify-between md:justify-start md:gap-4">
+          <span className="font-semibold text-lg">{meta?.label ?? rec.toolId}</span>
+          <span className={`flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-md font-medium border ${config.bg} ${config.color} ${config.border} uppercase tracking-wider`}>
+            <Icon className="w-3.5 h-3.5" />
+            {rec.recommendedAction}
+          </span>
+        </div>
+        <p className="text-sm text-muted-foreground leading-relaxed">{rec.reasoning}</p>
       </div>
-      <div className="flex items-baseline justify-between text-sm">
-        <span className="text-muted-foreground">${rec.currentSpend}/mo</span>
+
+      {/* Right Column: Financials */}
+      <div className="md:w-48 flex flex-col justify-center space-y-3 bg-secondary/30 p-4 rounded-lg">
+        <div className="flex justify-between items-center text-sm">
+          <span className="text-muted-foreground font-medium">Current</span>
+          <span className="font-mono">${rec.currentSpend}/mo</span>
+        </div>
+        
         {rec.monthlySavings > 0 && rec.currentSpend > 0 && (
-          <div className="w-full bg-secondary rounded-full h-1.5 mt-1">
-            <div
-              className="bg-green-500 h-1.5 rounded-full"
-              style={{ width: `${Math.min((rec.monthlySavings / rec.currentSpend) * 100, 100)}%` }}
-            />
+          <div className="space-y-1.5">
+            <div className="w-full bg-border rounded-full h-1">
+              <div
+                className="bg-primary h-1 rounded-full transition-all duration-1000"
+                style={{ width: `${Math.min((rec.monthlySavings / rec.currentSpend) * 100, 100)}%` }}
+              />
+            </div>
+            <div className="flex justify-between items-center text-sm font-medium">
+              <span className="text-primary">Savings</span>
+              <span className="text-primary font-mono">&minus;${rec.monthlySavings.toFixed(0)}/mo</span>
+            </div>
           </div>
         )}
-        {rec.monthlySavings > 0 && (
-          <span className="text-green-600 font-medium">
-            &minus;${rec.monthlySavings.toFixed(0)}/mo
-          </span>
-        )}
       </div>
-      <p className="text-xs text-muted-foreground leading-relaxed">{rec.reasoning}</p>
     </div>
   );
 }

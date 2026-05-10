@@ -37,25 +37,29 @@ export function SpendForm({ onSubmit, loading = false }: Props)  {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* Team context */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-1">
-          <Label>Team size</Label>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-card p-6 rounded-xl border shadow-sm">
+        <div className="space-y-2">
+          <Label className="font-medium text-muted-foreground text-xs uppercase tracking-wider">Team size</Label>
           <Input
             type="number"
             min={1}
-            value={input.teamSize}
-            onChange={(e) => setTeamSize(Number(e.target.value))}
+            value={input.teamSize || ""}
+            onChange={(e) => setTeamSize(e.target.value ? Number(e.target.value) : 1)}
+            className="h-11 transition-all"
+            placeholder="1"
           />
         </div>
-        <div className="space-y-1">
-          <Label>Primary use case</Label>
+        <div className="space-y-2">
+          <Label className="font-medium text-muted-foreground text-xs uppercase tracking-wider">Primary use case</Label>
           <Select value={input.useCase} onValueChange={(v) => v && setUseCase(v as UseCase)}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger className="h-11 transition-all">
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               {(["coding","writing","data","research","mixed"] as UseCase[]).map((u) => (
-                <SelectItem key={u} value={u}>{u}</SelectItem>
+                <SelectItem key={u} value={u} className="capitalize">{u}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -63,85 +67,119 @@ export function SpendForm({ onSubmit, loading = false }: Props)  {
       </div>
 
       {/* Add a tool */}
-      <div className="flex gap-2">
-        <Select value={selectedToolId} onValueChange={(v) => setSelectedToolId(v as ToolId)}>
-          <SelectTrigger className="flex-1"><SelectValue placeholder="Add a tool..." /></SelectTrigger>
-          <SelectContent>
-            {TOOLS.map((t) => (
-              <SelectItem key={t.id} value={t.id}>{t.label}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Button variant="outline" onClick={handleAddTool} disabled={!selectedToolId}>
-          Add
-        </Button>
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex-1 space-y-2">
+          <Label className="font-medium text-muted-foreground text-xs uppercase tracking-wider">Add Tool to Audit</Label>
+          <Select value={selectedToolId} onValueChange={(v) => setSelectedToolId(v as ToolId)}>
+            <SelectTrigger className="h-11 shadow-sm transition-all bg-card">
+              <SelectValue placeholder="Select a tool..." />
+            </SelectTrigger>
+            <SelectContent>
+              {TOOLS.map((t) => (
+                <SelectItem key={t.id} value={t.id}>{t.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex items-end">
+          <Button 
+            variant="secondary" 
+            onClick={handleAddTool} 
+            disabled={!selectedToolId}
+            className="w-full sm:w-auto h-11 px-8 font-medium shadow-sm transition-all"
+          >
+            Add Tool
+          </Button>
+        </div>
       </div>
 
       {/* Tool entries */}
-      {input.tools.map((entry) => {
-        const meta = TOOLS.find((t) => t.id === entry.toolId)!;
-        return (
-          <div key={entry.toolId} className="border rounded-lg p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="font-medium">{meta.label}</span>
-              <button
-                onClick={() => removeTool(entry.toolId)}
-                className="text-sm text-muted-foreground hover:text-destructive"
-              >
-                Remove
-              </button>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3">
-              {/* Plan */}
-              <div className="space-y-1">
-                <Label className="text-xs">Plan</Label>
-                <Select
-                  value={entry.plan}
-                  onValueChange={(v) => v && upsertTool({ ...entry, plan: v })}
-                >
-                  <SelectTrigger><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    {meta.plans.map((p) => (
-                      <SelectItem key={p.planId} value={p.planId}>{p.label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Seats — hidden for API-direct tools */}
-              {!meta.isApiDirect && (
-                <div className="space-y-1">
-                  <Label className="text-xs">Seats</Label>
-                  <Input
-                    type="number"
-                    min={1}
-                    value={entry.seats}
-                    onChange={(e) => upsertTool({ ...entry, seats: Number(e.target.value) })}
-                  />
+      <div className="space-y-4">
+        {input.tools.map((entry, index) => {
+          const meta = TOOLS.find((t) => t.id === entry.toolId)!;
+          return (
+            <div key={entry.toolId} className="p-6 rounded-xl border bg-card shadow-sm space-y-5 relative transition-all hover:shadow-md animate-in fade-in zoom-in-95 duration-300">
+              <div className="flex items-center justify-between border-b pb-4">
+                <div className="flex items-center gap-3">
+                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-secondary text-secondary-foreground text-xs font-medium">
+                    {index + 1}
+                  </span>
+                  <span className="text-lg font-semibold tracking-tight">{meta.label}</span>
                 </div>
-              )}
+                <button
+                  onClick={() => removeTool(entry.toolId)}
+                  className="text-xs font-medium text-muted-foreground hover:text-destructive transition-colors"
+                >
+                  Remove
+                </button>
+              </div>
 
-              {/* Monthly spend */}
-              <div className="space-y-1">
-                <Label className="text-xs">Monthly spend ($)</Label>
-                <Input
-                  type="number"
-                  min={0}
-                  value={entry.monthlySpend}
-                  onChange={(e) => upsertTool({ ...entry, monthlySpend: Number(e.target.value) })}
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                {/* Plan */}
+                <div className="space-y-2">
+                  <Label className="text-xs font-medium text-muted-foreground">Plan</Label>
+                  <Select
+                    value={entry.plan}
+                    onValueChange={(v) => v && upsertTool({ ...entry, plan: v })}
+                  >
+                    <SelectTrigger className="h-10">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {meta.plans.map((p) => (
+                        <SelectItem key={p.planId} value={p.planId}>{p.label}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Seats — hidden for API-direct tools */}
+                {!meta.isApiDirect && (
+                  <div className="space-y-2">
+                    <Label className="text-xs font-medium text-muted-foreground">Seats</Label>
+                    <Input
+                      type="number"
+                      min={1}
+                      value={entry.seats || ""}
+                      onChange={(e) => upsertTool({ ...entry, seats: e.target.value ? Number(e.target.value) : 1 })}
+                      className="h-10"
+                      placeholder="1"
+                    />
+                  </div>
+                )}
+
+                {/* Monthly spend */}
+                <div className="space-y-2">
+                  <Label className="text-xs font-medium text-muted-foreground">Monthly Spend ($)</Label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-2.5 text-muted-foreground">$</span>
+                    <Input
+                      type="number"
+                      min={0}
+                      value={entry.monthlySpend || ""}
+                      onChange={(e) => upsertTool({ ...entry, monthlySpend: e.target.value ? Number(e.target.value) : 0 })}
+                      className="h-10 pl-7 font-mono"
+                      placeholder="0"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
 
       {/* Submit */}
       {input.tools.length > 0 && (
-        <Button className="w-full" onClick={onSubmit} disabled={loading}>
-          {loading ? "Analysing..." : "Run audit →"}
-        </Button>
+        <div className="pt-6">
+          <Button 
+            className="w-full h-14 text-base font-medium tracking-wide shadow-md hover:shadow-lg transition-all" 
+            onClick={onSubmit} 
+            disabled={loading}
+          >
+            {loading ? "Analyzing spend data..." : "Generate Audit Report"}
+          </Button>
+        </div>
       )}
     </div>
   );
