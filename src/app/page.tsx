@@ -3,9 +3,26 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { AuditResult } from "@/types";
-import { SpendForm } from "@/components/SpendForm";
 import { useAuditStore } from "@/lib/store";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import dynamic from "next/dynamic";
+
+const ThemeToggle = dynamic(
+  () => import("@/components/ThemeToggle").then((m) => m.ThemeToggle),
+  { ssr: false, loading: () => <div className="w-10 h-10 border-2 border-foreground rounded-md" /> }
+);
+
+const SpendForm = dynamic(
+  () => import("@/components/SpendForm").then((m) => m.SpendForm),
+  { 
+    ssr: true,
+    loading: () => (
+      <div className="space-y-8 animate-pulse">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-card p-6 rounded-xl border shadow-sm h-32" />
+        <div className="flex flex-col sm:flex-row gap-4 h-24 bg-card rounded-xl border shadow-sm" />
+      </div>
+    )
+  }
+);
 
 export default function Home() {
   const router = useRouter();

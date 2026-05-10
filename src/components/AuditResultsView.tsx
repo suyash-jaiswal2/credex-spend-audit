@@ -2,9 +2,14 @@
 
 import type { AuditResult, ToolRecommendation } from "@/types";
 import { TOOLS } from "@/lib/tools";
-import { LeadCaptureForm } from "./LeadCaptureForm";
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import { CheckCircle2, TrendingDown, ArrowRightLeft, XCircle, Copy, Check } from "lucide-react";
+
+const LeadCaptureForm = dynamic(
+  () => import("./LeadCaptureForm").then((m) => m.LeadCaptureForm),
+  { ssr: true }
+);
 
 interface Props {
   result: AuditResult;
