@@ -2,14 +2,9 @@
 
 import type { AuditResult, ToolRecommendation } from "@/types";
 import { TOOLS } from "@/lib/tools";
-import dynamic from "next/dynamic";
+import { LeadCaptureForm } from "./LeadCaptureForm";
 import { useState } from "react";
 import { CheckCircle2, TrendingDown, ArrowRightLeft, XCircle, Copy, Check } from "lucide-react";
-
-const LeadCaptureForm = dynamic(
-  () => import("./LeadCaptureForm").then((m) => m.LeadCaptureForm),
-  { ssr: true }
-);
 
 interface Props {
   result: AuditResult;
@@ -48,7 +43,7 @@ export function AuditResultsView({ result, isPublic = false }: Props) {
 
       {/* Hero Savings Card */}
       <div className={`relative overflow-hidden rounded-2xl border p-8 md:p-12 shadow-sm ${
-        !isOptimal ? "bg-gradient-to-br from-card to-secondary/30" : "bg-card"
+        !isOptimal ? "bg-card" : "bg-card"
       }`}>
         <div className="relative z-10 space-y-4">
           {isOptimal ? (
@@ -92,12 +87,8 @@ export function AuditResultsView({ result, isPublic = false }: Props) {
           Stack Breakdown & Recommendations
         </h3>
         <div className="grid gap-4">
-          {recommendations.map((rec, i) => (
-            <div 
-              key={rec.toolId} 
-              className="animate-in fade-in slide-in-from-bottom-2 fill-mode-both"
-              style={{ animationDelay: `${i * 100}ms`, animationDuration: '300ms' }}
-            >
+          {recommendations.map((rec) => (
+            <div key={rec.toolId}>
               <RecommendationCard rec={rec} />
             </div>
           ))}

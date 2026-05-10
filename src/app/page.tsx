@@ -5,23 +5,11 @@ import { useState } from "react";
 import type { AuditResult } from "@/types";
 import { useAuditStore } from "@/lib/store";
 import dynamic from "next/dynamic";
+import { SpendForm } from "@/components/SpendForm";
 
 const ThemeToggle = dynamic(
   () => import("@/components/ThemeToggle").then((m) => m.ThemeToggle),
-  { ssr: false, loading: () => <div className="w-10 h-10 border-2 border-foreground rounded-md" /> }
-);
-
-const SpendForm = dynamic(
-  () => import("@/components/SpendForm").then((m) => m.SpendForm),
-  { 
-    ssr: true,
-    loading: () => (
-      <div className="space-y-8 animate-pulse">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-card p-6 rounded-xl border shadow-sm h-32" />
-        <div className="flex flex-col sm:flex-row gap-4 h-24 bg-card rounded-xl border shadow-sm" />
-      </div>
-    )
-  }
+  { ssr: false, loading: () => <div className="w-10 h-10 border border-foreground/10 rounded-md" /> }
 );
 
 export default function Home() {
@@ -56,7 +44,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans">
-      <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+      <header className="border-b bg-background px-6 py-4 flex justify-between items-center sticky top-0 z-50">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-bold text-lg">
             C
