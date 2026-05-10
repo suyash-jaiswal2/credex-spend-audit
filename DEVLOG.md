@@ -45,3 +45,15 @@
 **Blockers / what I'm stuck on:** Finding suitable users for interview
 
 **Plan for tomorrow:** Improve performance, redo UI, pdf export feature
+
+## Day 5 — 2026-05-10
+
+**Hours worked:** 5
+
+**What I did:** Redesign frontend, Set up resend finally, Optimize lighthouse performance for mobiles, Interview 2
+
+**What I learned:** Optimization tricks
+
+**Blockers / what I'm stuck on:** Performance still around 85
+
+**Plan for tomorrow:** Complete documentation
