@@ -7,13 +7,13 @@ Built as a lead-generation tool for [Credex](https://credex.rocks), which
 sells discounted AI infrastructure credits.
 
 ## Screenshots
-
-[Add 3 screenshots here — form, results page with savings, results page optimal]
-[Or a Loom/YouTube link to a 30-second screen recording]
+![alt text](image.png)
+![alt text](image-1.png)
+![alt text](image-2.png)
 
 ## Live URL
 
-[https://your-vercel-url.vercel.app](https://your-vercel-url.vercel.app)
+[https://credex-spend-audit-ten.vercel.app/](https://credex-spend-audit-ten.vercel.app/)
 
 ## Quick start
 
@@ -26,7 +26,7 @@ sells discounted AI infrastructure credits.
 ### Install and run locally
 
 \```bash
-git clone https://github.com/YOUR_USERNAME/credex-spend-audit
+git clone https://github.com/suyash-jaiswal2/credex-spend-audit
 cd credex-spend-audit
 npm install
 cp .env.example .env.local   # fill in your keys
