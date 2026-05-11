@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Spend Audit
 
-## Getting Started
+A free web app that audits your startup's AI tool spend and identifies
+where you're overpaying — no account required, results in under 2 minutes.
 
-First, run the development server:
+Built as a lead-generation tool for [Credex](https://credex.rocks), which
+sells discounted AI infrastructure credits.
 
-```bash
+## Screenshots
+
+[Add 3 screenshots here — form, results page with savings, results page optimal]
+[Or a Loom/YouTube link to a 30-second screen recording]
+
+## Live URL
+
+[https://your-vercel-url.vercel.app](https://your-vercel-url.vercel.app)
+
+## Quick start
+
+### Prerequisites
+- Node.js 20+
+- A Supabase project (free tier)
+- A Groq API key (free at console.groq.com)
+- A Resend API key (free tier)
+
+### Install and run locally
+
+\```bash
+git clone https://github.com/YOUR_USERNAME/credex-spend-audit
+cd credex-spend-audit
+npm install
+cp .env.example .env.local   # fill in your keys
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+\```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Where to get it |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase → Settings → API |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Settings → API |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Settings → API |
+| `GROQ_API_KEY` | console.groq.com |
+| `RESEND_API_KEY` | resend.com |
+| `RESEND_FROM_EMAIL` | Your verified Resend domain |
+| `NEXT_PUBLIC_APP_URL` | Your deployed URL |
 
-## Learn More
+### Run tests
 
-To learn more about Next.js, take a look at the following resources:
+\```bash
+npm test
+\```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Push to `main` — Vercel auto-deploys. Make sure all env vars are set
+in the Vercel dashboard before deploying.
 
-## Deploy on Vercel
+## Decisions
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Groq over Anthropic API for the AI summary** — Groq's free tier has
+   sufficient rate limits for a tool at this scale and llama-3.3-70b produces
+   comparable output for a short summarisation task. Fallback to a templated
+   string means users never see a broken state if Groq is down.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2. **Hardcoded rules in the audit engine, not AI** — The audit logic is
+   deterministic price comparisons. Using an LLM here would introduce
+   hallucinated prices and non-reproducible reasoning. A finance person
+   should be able to read the rules and agree with them.
+
+3. **Email captured after value is shown, never before** — Following the
+   brief exactly, but also the right product decision. Asking for email
+   before showing results would tank completion rates. The results page
+   is the hook.
+
+4. **Zustand with `persist` middleware over React state** — The form has
+   8+ tools with multiple fields each. Losing that on a page refresh is
+   a bad experience. Zustand's persist middleware adds one line and handles
+   serialisation automatically.
+
+5. **Server component for the shareable audit page** — The `/audit/:id`
+   route is a Next.js server component so Open Graph meta tags are rendered
+   server-side and Twitter/Slack unfurls work correctly. A client-only
+   approach would have broken link previews.
