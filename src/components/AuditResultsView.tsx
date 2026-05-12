@@ -95,22 +95,22 @@ export function AuditResultsView({ result, isPublic = false }: Props) {
         </div>
       </div>
 
-      {/* Credex CTA */}
+      {/* Contact CTA */}
       {isHighSavings && (
         <div className="rounded-2xl border bg-card p-8 shadow-sm mt-12 space-y-6 animate-in fade-in zoom-in-95 duration-500 delay-200">
           <div className="space-y-2">
-            <h3 className="text-2xl font-semibold tracking-tight">Scale Your Savings with Credex</h3>
+            <h3 className="text-2xl font-semibold tracking-tight">Contact Us to Scale Your Savings</h3>
             <p className="text-muted-foreground leading-relaxed">
-              We source secondary-market AI credits from enterprise over-allocations. Teams optimizing their stack structure often achieve an additional <strong className="text-foreground font-semibold">20–40% net reduction</strong> in unit costs by purchasing through the Credex exchange.
+              We source secondary-market AI credits from enterprise over-allocations. Teams optimizing their stack structure often achieve an additional <strong className="text-foreground font-semibold">20–40% net reduction</strong> in unit costs by working with us.
             </p>
           </div>
           <a
-            href="https://credex.rocks"
+            href="https://portfolio-website-gamma-self.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center h-12 px-8 rounded-lg bg-primary text-primary-foreground font-medium shadow-md hover:shadow-lg transition-all"
           >
-            Schedule Executive Review
+            Contact Us
           </a>
         </div>
       )}

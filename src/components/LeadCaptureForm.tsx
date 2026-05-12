@@ -52,7 +52,7 @@ export function LeadCaptureForm({ auditId, isOptimal }: Props) {
         <p className="text-sm text-muted-foreground mt-1">
           {isOptimal
             ? "AI pricing changes fast. We'll let you know when there's a saving opportunity."
-            : "We'll send a PDF summary and flag if Credex credits could save you more."}
+            : "We'll send a PDF summary and flag if we could save you more."}
         </p>
       </div>
 

@@ -47,10 +47,10 @@ export default function Home() {
       <header className="border-b bg-background px-6 py-4 flex justify-between items-center sticky top-0 z-50">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-bold text-lg">
-            C
+            P
           </div>
           <span className="font-semibold tracking-tight text-lg">
-            Credex
+            Portfolio
           </span>
         </div>
         <ThemeToggle />

@@ -75,8 +75,8 @@ export async function POST(req: NextRequest) {
         ${isHighSavings ? `
           <hr>
           <p><strong>Want to save even more?</strong><br>
-          Credex sources discounted AI credits from companies that overforecast.
-          <a href="https://credex.rocks">Book a free consultation</a>.</p>
+          We source discounted AI credits from companies that overforecast.
+          <a href="https://portfolio-website-gamma-self.vercel.app/">Contact Us</a>.</p>
         ` : ""}
         <p style="color:#888;font-size:12px;">
           You're receiving this because you used the AI Spend Audit tool.
