@@ -41,8 +41,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? `Potential savings of $${Math.round(savings * 12)}/year identified across your AI tools.`
     : "No overspend found — your AI tool stack is well optimised.";
 
-  const ogImageUrl = `${process.env.NEXT_PUBLIC_APP_URL}/audit/${id}/opengraph-image`;
-
   return {
     title,
     description,
@@ -52,20 +50,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `${process.env.NEXT_PUBLIC_APP_URL}/audit/${id}`,
       siteName: "AI Spend Audit",
       type: "website",
-      images: [
-        {
-          url: ogImageUrl,
-          width: 1200,
-          height: 630,
-          alt: title,
-        },
-      ],
+      // no images — opengraph-image.tsx handles this automatically
     },
     twitter: {
-      card: "summary_large_image",   // was "summary" — this is why no image showed
+      card: "summary_large_image",
       title,
       description,
-      images: [ogImageUrl],
+      // no images — Next.js injects the correct hashed URL automatically
     },
   };
 }
