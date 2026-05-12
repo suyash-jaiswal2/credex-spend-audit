@@ -1,83 +1,55 @@
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 export async function GET(req: NextRequest) {
   const savings = Number(req.nextUrl.searchParams.get("savings") ?? "0");
+  const annual = Math.round(savings * 12);
   const isOptimal = savings < 100;
 
   return new ImageResponse(
     (
       <div
         style={{
-          width: "1200px",
-          height: "630px",
+          width: "100%",
+          height: "100%",
+          background: "white",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#ffffff",
-          padding: "80px",
           fontFamily: "sans-serif",
         }}
       >
-        <div
-          style={{
-            fontSize: 26,
-            color: "#6b7280",
-            marginBottom: 24,
-            letterSpacing: "0.08em",
-          }}
-        >
+        {/* Top label */}
+        <div style={{ display: "flex", fontSize: 24, color: "#9ca3af", marginBottom: 20, letterSpacing: 4 }}>
           AI SPEND AUDIT
         </div>
 
-        {isOptimal ? (
-          <div
-            style={{
-              fontSize: 64,
-              fontWeight: 700,
-              color: "#111827",
-              textAlign: "center",
-              lineHeight: 1.2,
-            }}
-          >
-            Your stack is optimised
-          </div>
-        ) : (
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <div
-              style={{
-                fontSize: 100,
-                fontWeight: 700,
-                color: "#16a34a",
-                lineHeight: 1,
-                marginBottom: 12,
-              }}
-            >
-              ${Math.round(savings)}/mo
-            </div>
-            <div
-              style={{
-                fontSize: 36,
-                color: "#6b7280",
-              }}
-            >
-              ${Math.round(savings * 12).toLocaleString()} saved per year
-            </div>
+        {/* Main message */}
+        <div style={{ display: "flex", fontSize: 32, color: "#6b7280", marginBottom: 8 }}>
+          {isOptimal ? "No savings found —" : "We found potential savings of"}
+        </div>
+
+        {/* Big number or optimal message */}
+        <div style={{ display: "flex", fontSize: isOptimal ? 72 : 110, fontWeight: 700, color: isOptimal ? "#111827" : "#16a34a", marginBottom: isOptimal ? 0 : 8 }}>
+          {isOptimal ? "You are spending well" : `$${Math.round(savings)}/mo`}
+        </div>
+
+        {/* Annual savings */}
+        {!isOptimal && (
+          <div style={{ display: "flex", fontSize: 40, color: "#6b7280", marginBottom: 0 }}>
+            {`$${annual.toLocaleString()} per year`}
           </div>
         )}
 
-        <div
-          style={{
-            display: "flex",
-            fontSize: 22,
-            color: "#9ca3af",
-            marginTop: 48,
-          }}
-        >
-          credex-spend-audit-ten.vercel.app
+        {/* Divider */}
+        <div style={{ display: "flex", width: "80%", height: 1, background: "#e5e7eb", marginTop: 40, marginBottom: 24 }} />
+
+        {/* Footer */}
+        <div style={{ display: "flex", fontSize: 22, color: "#9ca3af" }}>
+          credex-spend-audit-ten.vercel.app — free audit, no account needed
         </div>
       </div>
     ),
