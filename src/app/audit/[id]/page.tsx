@@ -35,11 +35,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const savings = audit.totalMonthlySavings;
   const title = savings > 0
-    ? `AI spend audit — $${savings.toFixed(0)}/mo in savings found`
+    ? `AI spend audit — $${Math.round(savings)}/mo in savings found`
     : "AI spend audit — your stack is optimised";
   const description = savings > 0
-    ? `Potential savings of $${(savings * 12).toFixed(0)}/year identified across your AI tool stack.`
-    : "No overspend found — your AI stack is well optimised.";
+    ? `Potential savings of $${Math.round(savings * 12)}/year identified across your AI tools.`
+    : "No overspend found — your AI tool stack is well optimised.";
+
+  const ogImageUrl = `${process.env.NEXT_PUBLIC_APP_URL}/audit/${id}/opengraph-image`;
 
   return {
     title,
@@ -47,14 +49,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      url: `${process.env.NEXT_PUBLIC_APP_URL}/audit/${audit}`,
+      url: `${process.env.NEXT_PUBLIC_APP_URL}/audit/${id}`,
       siteName: "AI Spend Audit",
       type: "website",
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",   // was "summary" — this is why no image showed
       title,
       description,
+      images: [ogImageUrl],
     },
   };
 }
