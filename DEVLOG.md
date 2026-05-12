@@ -69,3 +69,16 @@
 **Blockers / what I'm stuck on:** Nothing
 
 **Plan for tomorrow:** Sanity check, and code review
+
+## Day 7 — 2026-05-12
+
+**Hours worked:** 5
+
+**What I did:** Wrote REFLECTION.md, completed final QA checklist, verified
+git history across 5+ days, submitted via Google Form. Removed every mention of credex and replaced it with my own webpage.
+
+**What I learned:** NA
+
+**Blockers / what I'm stuck on:** None — submission day.
+
+**Plan for tomorrow:** Wait for Round 2 results.
