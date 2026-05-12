@@ -5,15 +5,14 @@ export const runtime = "edge";
 
 export async function GET(req: NextRequest) {
   const savings = Number(req.nextUrl.searchParams.get("savings") ?? "0");
-  const annual = Math.round(savings * 12);
   const isOptimal = savings < 100;
 
   return new ImageResponse(
     (
       <div
         style={{
-          width: "100%",
-          height: "100%",
+          width: "1200px",
+          height: "630px",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -29,10 +28,9 @@ export async function GET(req: NextRequest) {
             color: "#6b7280",
             marginBottom: 24,
             letterSpacing: "0.08em",
-            textTransform: "uppercase",
           }}
         >
-          AI Spend Audit
+          AI SPEND AUDIT
         </div>
 
         {isOptimal ? (
@@ -45,10 +43,10 @@ export async function GET(req: NextRequest) {
               lineHeight: 1.2,
             }}
           >
-            You&apos;re spending well ✓
+            Your stack is optimised
           </div>
         ) : (
-          <>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <div
               style={{
                 fontSize: 100,
@@ -64,26 +62,22 @@ export async function GET(req: NextRequest) {
               style={{
                 fontSize: 36,
                 color: "#6b7280",
-                marginBottom: 48,
               }}
             >
-              ${annual.toLocaleString()} saved per year
+              ${Math.round(savings * 12).toLocaleString()} saved per year
             </div>
-          </>
+          </div>
         )}
 
         <div
           style={{
+            display: "flex",
             fontSize: 22,
             color: "#9ca3af",
-            borderTop: "1px solid #e5e7eb",
-            paddingTop: 28,
-            width: "100%",
-            textAlign: "center",
-            marginTop: 24,
+            marginTop: 48,
           }}
         >
-          Free audit · credex-spend-audit-ten.vercel.app
+          credex-spend-audit-ten.vercel.app
         </div>
       </div>
     ),
