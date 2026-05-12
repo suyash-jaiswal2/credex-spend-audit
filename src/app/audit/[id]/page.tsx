@@ -38,8 +38,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? `AI spend audit — $${Math.round(savings)}/mo in savings found`
     : "AI spend audit — your stack is optimised";
   const description = savings > 0
-    ? `Potential savings of $${Math.round(savings * 12)}/year identified across your AI tools.`
+    ? `Potential savings of $${Math.round(savings * 12).toLocaleString()}/year identified across your AI tools.`
     : "No overspend found — your AI tool stack is well optimised.";
+
+  const ogImageUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/og?savings=${Math.round(savings)}`;
 
   return {
     title,
@@ -50,13 +52,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `${process.env.NEXT_PUBLIC_APP_URL}/audit/${id}`,
       siteName: "AI Spend Audit",
       type: "website",
-      // no images — opengraph-image.tsx handles this automatically
+      images: [{ url: ogImageUrl, width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      // no images — Next.js injects the correct hashed URL automatically
+      images: [ogImageUrl],
     },
   };
 }

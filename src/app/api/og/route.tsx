@@ -1,26 +1,11 @@
 import { ImageResponse } from "next/og";
-import { supabaseAdmin } from "@/lib/supabase";
+import { NextRequest } from "next/server";
 
-export const runtime = "nodejs";
-export const alt = "AI Spend Audit";
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
+export const runtime = "edge";
 
-export default async function Image({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-
-  const { data } = await supabaseAdmin
-    .from("audits")
-    .select("total_monthly_savings, total_annual_savings")
-    .eq("id", id)
-    .single();
-
-  const savings = data?.total_monthly_savings ?? 0;
-  const annual = data?.total_annual_savings ?? 0;
+export async function GET(req: NextRequest) {
+  const savings = Number(req.nextUrl.searchParams.get("savings") ?? "0");
+  const annual = Math.round(savings * 12);
   const isOptimal = savings < 100;
 
   return new ImageResponse(
@@ -38,27 +23,26 @@ export default async function Image({
           fontFamily: "sans-serif",
         }}
       >
-        {/* Top label */}
         <div
           style={{
-            fontSize: 28,
+            fontSize: 26,
             color: "#6b7280",
             marginBottom: 24,
-            letterSpacing: "0.05em",
+            letterSpacing: "0.08em",
             textTransform: "uppercase",
           }}
         >
           AI Spend Audit
         </div>
 
-        {/* Main number */}
         {isOptimal ? (
           <div
             style={{
-              fontSize: 72,
+              fontSize: 64,
               fontWeight: 700,
               color: "#111827",
-              marginBottom: 16,
+              textAlign: "center",
+              lineHeight: 1.2,
             }}
           >
             You&apos;re spending well ✓
@@ -67,10 +51,11 @@ export default async function Image({
           <>
             <div
               style={{
-                fontSize: 96,
+                fontSize: 100,
                 fontWeight: 700,
                 color: "#16a34a",
-                marginBottom: 8,
+                lineHeight: 1,
+                marginBottom: 12,
               }}
             >
               ${Math.round(savings)}/mo
@@ -82,26 +67,26 @@ export default async function Image({
                 marginBottom: 48,
               }}
             >
-              ${Math.round(annual)} saved per year
+              ${annual.toLocaleString()} saved per year
             </div>
           </>
         )}
 
-        {/* Bottom tag */}
         <div
           style={{
-            fontSize: 24,
+            fontSize: 22,
             color: "#9ca3af",
             borderTop: "1px solid #e5e7eb",
-            paddingTop: 32,
+            paddingTop: 28,
             width: "100%",
             textAlign: "center",
+            marginTop: 24,
           }}
         >
-          Free audit at credex-spend-audit.vercel.app
+          Free audit · credex-spend-audit-ten.vercel.app
         </div>
       </div>
     ),
-    { ...size }
+    { width: 1200, height: 630 }
   );
 }
